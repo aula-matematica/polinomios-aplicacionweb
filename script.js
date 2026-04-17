@@ -143,17 +143,7 @@ function playSound(id) {
     if (!s) return;
 
     s.currentTime = 0;
-
-    const playPromise = s.play();
-
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            // 🔥 Forzar desbloqueo con interacción previa
-            document.body.addEventListener('touchstart', () => {
-                s.play();
-            }, { once: true });
-        });
-    }
+    s.play().catch(() => {});
 }
 
 function cambiarCara(animo, elementoId) {
@@ -699,3 +689,13 @@ document.querySelectorAll('button').forEach(btn => {
         btn.classList.remove('hover');
     });
 });
+
+document.addEventListener("touchstart", () => {
+    const sonidos = document.querySelectorAll("audio");
+    sonidos.forEach(s => {
+        s.play().then(() => {
+            s.pause();
+            s.currentTime = 0;
+        }).catch(() => {});
+    });
+}, { once: true });
