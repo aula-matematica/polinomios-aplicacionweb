@@ -689,3 +689,13 @@ chatBox.addEventListener("scroll", () => {
         autoScrollActivo = false; // 👈 usuario está explorando arriba
     }
 });
+
+document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('touchstart', () => {
+        btn.classList.add('hover');
+    });
+
+    btn.addEventListener('touchend', () => {
+        btn.classList.remove('hover');
+    });
+});
