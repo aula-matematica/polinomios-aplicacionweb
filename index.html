@@ -56,21 +56,31 @@
         
         <div id="chat-box"></div>
         
-        <div class="footer-fixed">
-            <div id="options-area" class="hidden">
-    <div class="options-container">
-        <button id="opt-a" class="opt-btn"></button>
-        <button id="opt-b" class="opt-btn"></button>
-        <button id="opt-c" class="opt-btn hidden"></button> </div>
-</div>
+  <div class="footer-fixed">
+
+    <div id="options-area" class="hidden">
+        <div class="options-container">
+            <button id="opt-a" class="opt-btn"></button>
+            <button id="opt-b" class="opt-btn"></button>
+            <button id="opt-c" class="opt-btn hidden"></button>
+        </div>
+    </div>
+
+    <div id="input-section" class="hidden">
+        <div class="input-bar">
+            <div id="user-answer-container">
+                <div id="visual-input" class="placeholder">Respuesta...</div>
             </div>
-            <div id="input-section" class="hidden">
-                <div class="input-bar">
-                    <div id="user-answer-container">
-                        <div id="visual-input" class="placeholder">Respuesta...</div>
-                    </div>
-                    <button id="send-btn">➤</button>
-                </div>
+            <button id="send-btn">➤</button>
+        </div>
+
+        <div id="math-keyboard">
+            <!-- teclado aquí -->
+        </div>
+    </div>
+
+</div>
+
        <div id="math-keyboard">
 
     <button class="key">(</button>
@@ -103,12 +113,9 @@
         </div>
     </div>
 
-    <audio id="sound-send" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
-    <audio id="sound-receive" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3"></audio>
-    
-    <script src="script.js"></script>
+    <audio id="sound-send" src="send.mp3"></audio>
+<audio id="sound-receive" src="receive.mp3"></audio>
+
+<script src="script.js"></script>
 </body>
 </html>
-
-<audio id="sound-send" src="send.mp3"></audio>
-<audio id="sound-receive" src="receive.mp3"></audio>
