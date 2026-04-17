@@ -140,7 +140,20 @@ function adj(masculino, femenino) {
 
 function playSound(id) {
     const s = document.getElementById(id);
-    if (s) { s.currentTime = 0; s.play().catch(e => console.log("Audio bloqueado")); }
+    if (!s) return;
+
+    s.currentTime = 0;
+
+    const playPromise = s.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            // 🔥 Forzar desbloqueo con interacción previa
+            document.body.addEventListener('touchstart', () => {
+                s.play();
+            }, { once: true });
+        });
+    }
 }
 
 function cambiarCara(animo, elementoId) {
