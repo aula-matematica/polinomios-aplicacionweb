@@ -1,4 +1,4 @@
-const MENSAJES_INTELIGENTES = {
+onst MENSAJES_INTELIGENTES = {
     suma: {
         intro: [
             "Observa cómo se combinan los términos 👀",
@@ -146,7 +146,7 @@ function playSound(id) {
     s.play().catch(() => {});
 }
 
-function cambiarCara(animo, elementoId) {
+fuction cambiarCara(animo, elementoId) {
     const idFinal = (elementoId === 'teacher-avatar') ? 'teacher-avatar-header' : elementoId;
     const img = document.getElementById(idFinal);
     if(img && userData.gender) {
@@ -410,6 +410,7 @@ async function msgTutor(mensajes, animo = "s") {
         div.innerHTML = format(t); 
         
         box.appendChild(div);
+        scrollSuave();
         box.scrollTop = box.scrollHeight;
         if (lista.length > 1) await new Promise(r => setTimeout(r, 1200));
     }
@@ -424,6 +425,7 @@ function msgUser(t) {
     
     const chat = document.getElementById('chat-box');
     chat.appendChild(div);
+    scrollSuave();
     chat.scrollTop = chat.scrollHeight;
 }
 
@@ -658,36 +660,66 @@ function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-setInterval(() => {
-    if (!autoScrollActivo) return;
+function scrollSuave() {
+    const chat = document.getElementById("chat-box");
 
-    const chatBox = document.getElementById("chat-box");
-
-    const cercaDelFinal = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 100;
-
-    if (cercaDelFinal) {
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-}, 200);
+    chat.scrollTo({
+        top: chat.scrollHeight,
+        behavior: "smooth"
+    });
+}
 
 const chatBox = document.getElementById("chat-box");
 
 chatBox.addEventListener("scroll", () => {
     const cercaDelFinal = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 50;
 
-    if (!cercaDelFinal) {
-        autoScrollActivo = false; // 👈 usuario está explorando arriba
-    }
+    autoScrollActivo = cercaDelFinal;
 });
 
 document.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('touchstart', () => {
-        btn.classList.add('hover');
+
+    function activarBoton(e) {
+        btn.classList.add('active-touch');
+
+        // 📳 Vibración (solo móvil compatible)
+        if (navigator.vibrate) {
+            navigator.vibrate(15);
+        }
+
+        // 🌊 Ripple
+        const circle = document.createElement("span");
+        circle.classList.add("ripple");
+
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+
+        circle.style.width = circle.style.height = size + "px";
+        circle.style.left = (e.clientX - rect.left - size / 2) + "px";
+        circle.style.top = (e.clientY - rect.top - size / 2) + "px";
+
+        btn.appendChild(circle);
+
+        setTimeout(() => {
+            circle.remove();
+        }, 500);
+    }
+
+    function desactivarBoton() {
+        btn.classList.remove('active-touch');
+    }
+
+    // 📱 Touch
+    btn.addEventListener('touchstart', (e) => {
+        activarBoton(e.touches[0]);
     });
 
-    btn.addEventListener('touchend', () => {
-        btn.classList.remove('hover');
-    });
+    btn.addEventListener('touchend', desactivarBoton);
+
+    // 🖱️ PC
+    btn.addEventListener('mousedown', activarBoton);
+    btn.addEventListener('mouseup', desactivarBoton);
+    btn.addEventListener('mouseleave', desactivarBoton);
 });
 
 document.addEventListener("touchstart", () => {
@@ -699,3 +731,53 @@ document.addEventListener("touchstart", () => {
         }).catch(() => {});
     });
 }, { once: true });
+
+document.addEventListener("click", () => {
+    const audios = document.querySelectorAll("audio");
+    audios.forEach(a => {
+        a.play().then(() => {
+            a.pause();
+            a.currentTime = 0;
+        }).catch(() => {});
+    });
+}, { once: true });
+
+let alturaInicial = window.innerHeight;
+
+window.addEventListener("resize", () => {
+    const nuevaAltura = window.innerHeight;
+
+    // Si baja mucho → teclado abierto
+    if (alturaInicial - nuevaAltura > 150) {
+        scrollSuave();
+    }
+
+    alturaInicial = nuevaAltura;
+});
+
+const chatBox = document.getElementById("chat-box");
+const footer = document.querySelector(".footer-fixed");
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+
+        const alturaPantalla = window.innerHeight;
+        const alturaVisible = window.visualViewport.height;
+
+        const tecladoAltura = alturaPantalla - alturaVisible;
+
+        if (tecladoAltura > 100) {
+            // 🔥 teclado abierto
+            footer.style.transform = `translateY(-${tecladoAltura}px)`;
+            chatBox.style.paddingBottom = `${tecladoAltura + 120}px`;
+
+            // 👇 EXTRA PRO (recomendado)
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+        } else {
+            // 🔥 teclado cerrado
+            footer.style.transform = `translateY(0px)`;
+            chatBox.style.paddingBottom = `140px`;
+        }
+    });
+}
