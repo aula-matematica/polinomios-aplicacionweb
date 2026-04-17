@@ -3,7 +3,7 @@ const MENSAJES_INTELIGENTES = {
         intro: [
             "Observa cómo se combinan los términos 👀",
             "Este ejercicio es directo, fíjate bien en los signos.",
-            "Vamos a trabajar con suma de polinomios 💪"
+            "Vamos a trabajar con suma de polinomios 💪" 
         ],
         pista: "Aquí no cambian los signos, solo elimina los paréntesis."
     },
