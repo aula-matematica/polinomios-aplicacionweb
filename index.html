@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatMath Solve</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="welcome-screen">
+        <div class="profile-card">
+            <h2>¡Bienvenido a ChatMath!</h2>
+            <p>Configura tu perfil para comenzar</p>
+            <div class="input-group">
+                <label>Nombre:</label>
+                <input type="text" id="user-name" placeholder="Tu nombre...">
+            </div>
+            <div class="input-group">
+                <label>Edad:</label>
+                <input type="number" id="user-age" placeholder="Tu edad...">
+            </div>
+            <div class="input-group">
+                <label>Género:</label>
+                <select id="user-gender">
+                    <option value="femenino">Femenino</option>
+                    <option value="masculino">Masculino</option>
+                </select>
+            </div>
+            <button id="start-btn">Comenzar Aventura</button>
+        </div>
+    </div>
+
+   <div id="lesson-screen" class="hidden">
+    <div class="profile-card">
+        <div class="avatar-lesson-container">
+            <img id="lesson-avatar" src="" alt="Tutor">
+        </div>
+        <h2 id="lesson-title" style="color:var(--color-tutor)">Título</h2>
+        <div class="lesson-bubble-container">
+            <p id="lesson-text" class="msg tutor-msg">Texto de la lección...</p>
+        </div>
+        <button id="next-lesson-btn" class="lila-btn-main">Siguiente</button>
+    </div>
+</div>
+
+    <div id="app-container" class="hidden">
+        <div class="tutor-fixed-header">
+            <img id="teacher-avatar" src="" alt="Tutor">
+        </div>
+<header id="main-header" class="chat-header">
+    <div class="header-content">
+        <img id="teacher-avatar-header" src="" alt="Tutor" class="avatar-circle">
+        <span>ChatMath Solve</span>
+    </div>
+</header>
+        
+        <div id="chat-box"></div>
+        
+        <div class="footer-fixed">
+            <div id="options-area" class="hidden">
+    <div class="options-container">
+        <button id="opt-a" class="opt-btn"></button>
+        <button id="opt-b" class="opt-btn"></button>
+        <button id="opt-c" class="opt-btn hidden"></button> </div>
+</div>
+            </div>
+            <div id="input-section" class="hidden">
+                <div class="input-bar">
+                    <div id="user-answer-container">
+                        <div id="visual-input" class="placeholder">Respuesta...</div>
+                    </div>
+                    <button id="send-btn">➤</button>
+                </div>
+       <div id="math-keyboard">
+
+    <button class="key">(</button>
+    <button class="key">)</button>
+    <button class="key">+</button>
+    <button class="key">-</button>
+
+    <button class="key">7</button>
+    <button class="key">8</button>
+    <button class="key">9</button>
+    <button class="key key-variable">x</button>
+
+    <button class="key">4</button>
+    <button class="key">5</button>
+    <button class="key">6</button>
+    <button class="key key-variable">y</button>
+
+    <button class="key">1</button>
+    <button class="key">2</button>
+    <button class="key">3</button>
+    <button class="key delete-key">⌫</button>
+
+    <button class="key">0</button>
+    <button class="key space-key">␣</button>
+    <button class="key clear-key">C</button>
+    <button class="key send-key">=</button>
+
+</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="sound-send" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
+    <audio id="sound-receive" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>

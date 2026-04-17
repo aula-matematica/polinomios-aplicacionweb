@@ -1,0 +1,626 @@
+:root {
+    /* Colores base originales */
+    --color-tutor: #b8a5dd; 
+    --color-user: #c9ecff;
+    --texto-user: #3a73e7;
+    --gris-fondo: #eef0f5;
+    --bordes-gris: #a7aab5;
+}
+
+/* Clases para el Tema Masculino */
+.tema-masculino {
+    --color-tutor: #e5d3b3;
+    --color-user: #d4edda;
+    --texto-user: #155724;
+}
+
+body { 
+    font-family: Arial, sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100dvh; 
+    margin: 0; 
+    background: #f2f2f7; 
+}
+
+#welcome-screen, #lesson-screen { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: var(--gris-fondo); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 50; /* Bajamos este un poco */
+}
+
+.profile-card { 
+    background: white; 
+    padding: 25px; 
+    border-radius: 30px; 
+    width: 85%;   
+    max-width: 320px;      
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    text-align: center; 
+    position: relative; 
+    z-index: 60;
+}
+
+/* Estilo para el Avatar en la Lección (Grande) */
+.avatar-lesson-container {
+    width: 100%;
+    height: 220px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+#lesson-avatar {
+    height: 100%;
+    object-fit: contain; /* Evita que se deforme */
+}
+
+/* Contenedor principal del Chat */
+#app-container { 
+    width: 100%;           /* Ocupa todo el ancho disponible... */
+    max-width: 450px;      /* ...pero no se estira más de esto en PC */
+    height: 100dvh;         /* Ocupa el 100% de la altura de la pantalla del celular */
+    background: white; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    border: none;          /* Quitamos bordes en móviles para que se vea nativo */
+    position: relative;
+}
+
+/* --- ESTO QUITA EL AVATAR DE ARRIBA --- */
+.tutor-fixed-header {
+    display: none !important;
+}
+
+.chat-header { 
+    background: var(--color-tutor); 
+    padding: 12px;
+    padding-top: calc(12px + env(safe-area-inset-top));
+    text-align: center; 
+    font-weight: bold; 
+    color: white; 
+}
+
+#chat-box { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    background: white;
+
+    max-height: 60vh; /* 🔥 CLAVE */
+}
+
+/* Burbujas de Chat */
+.msg { 
+    max-width: 85%; 
+    padding: 10px 14px;
+    border-radius: 20px; 
+    line-height: 1.2;
+    word-wrap: break-word; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.95rem;
+}
+
+.tutor-msg { 
+    align-self: flex-start; 
+    background: var(--gris-fondo); 
+    color: black; 
+    border-bottom-left-radius: 4px; 
+}
+
+.user-msg { 
+    align-self: flex-end; 
+    background: var(--color-user); 
+    color: var(--texto-user); 
+    border-bottom-right-radius: 4px; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/* Botones y Entradas */
+
+/* Efecto al pasar el mouse o tocarlo */
+#start-btn:active, .lila-btn-main:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(184, 165, 221, 0.3);
+}
+.tema-masculino #start-btn, 
+.tema-masculino .lila-btn-main {
+    box-shadow: 0 4px 15px rgba(229, 211, 179, 0.4); /* Sombra Beige */
+}
+
+.input-group { text-align: left; margin-bottom: 15px; }
+.input-group label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 5px; }
+.input-group input, .input-group select { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid var(--bordes-gris); 
+    border-radius: 10px; 
+    box-sizing: border-box;
+}
+
+/* Footer y Teclado */
+.footer-fixed { background: var(--gris-fondo); padding-bottom: 15px; border-top: 1px solid #ddd; }
+.input-bar { display: flex; gap: 10px; padding: 10px 15px; align-items: center; }
+
+#user-answer-container { 
+    flex: 1; 
+    background: white; 
+    border: 1px solid var(--bordes-gris); 
+    border-radius: 25px; 
+    min-height: 45px; 
+    display: flex; 
+    align-items: center; 
+    padding: 0 18px; 
+}
+
+#send-btn { 
+    background: none; 
+    border: none; 
+    color: var(--color-tutor); 
+    font-size: 1.8rem; 
+    cursor: pointer; 
+}
+
+.opt-btn { 
+    display: block; 
+    width: 90%; 
+    margin: 8px auto; 
+    padding: 14px; 
+    border: 1px solid var(--color-tutor); 
+    border-radius: 15px; 
+    background: white; 
+    text-align: left; 
+    cursor: pointer; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Clase auxiliar para el efecto de desvanecimiento */
+.fade-out {
+    opacity: 0;
+}
+
+/* Para que los signos + y - se vean con espacio a los lados como en la imagen */
+.math-sign {
+    margin: 0 8px; /* Espacio extra para que se vea amplio como la imagen */
+    font-family: sans-serif;
+    font-weight: normal;
+}
+
+/* Asegura que el contenedor no tenga fondos oscuros */
+.avatar-lesson-container, .tutor-fixed-header {
+    background-color: #ffffff; /* O puedes usar transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#lesson-avatar, #teacher-avatar {
+    background-color: transparent !important;
+    /* Una sombra suave lila hará que el personaje resalte más */
+    filter: drop-shadow(0px 4px 6px rgba(184, 165, 221, 0.3));
+}
+/* Esto cambiará el color de "¡Bienvenido a ChatMath!" y otros títulos similares */
+.profile-card h2 {
+    color: var(--color-tutor); /* Usará lila para femenino y beige para masculino */
+    margin-bottom: 10px;
+}
+/* Contenedor para centrar la burbuja en la lección */
+.lesson-bubble-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+/* Ajuste específico para que la burbuja no sea demasiado ancha */
+#lesson-text.tutor-msg {
+    max-width: 100%;
+    text-align: left; /* Mantiene el texto alineado a la izquierda como un chat */
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra muy sutil */
+}
+
+/* Efecto al presionarlo */
+#next-lesson-btn:active, #start-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* Ajuste de sombra para el profesor (Beige) */
+.tema-masculino #next-lesson-btn, 
+.tema-masculino #start-btn {
+    box-shadow: 0 6px 20px rgba(229, 211, 179, 0.4) !important;
+}
+/* --- ESTILO DE BOTÓN REFORZADO --- */
+
+#next-lesson-btn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Animación para las burbujas del tutor */
+.tutor-msg {
+    animation: fadeInSmooth 0.5s ease-out;
+}
+
+@keyframes fadeInSmooth {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.tutor-msg b {
+    color: #6a5acd; /* Un color lila oscuro para resaltar la palabra clave */
+    font-weight: 700;
+}
+
+#math-keyboard button:active {
+    transform: scale(0.96);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* Esto arregla el tamaño para que NO tape nada */
+.avatar-circle {
+    width: 40px !important;    /* Tamaño pequeño fijo */
+    height: 40px !important;   /* Tamaño pequeño fijo */
+    border-radius: 50% !important; /* Lo hace circular */
+    object-fit: cover !important;  /* Recorta la imagen para que no se estire */
+    object-position: center top;   /* Centra la cara del personaje */
+    background-color: white;
+    border: 2px solid var(--color-tutor);
+    flex-shrink: 0; /* Evita que se aplaste si el título es largo */
+}
+
+/* Alinea el contenido del header en una sola línea */
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 5px 15px;
+}
+
+/* Ajuste para que el título no se mueva */
+.chat-header span {
+    font-size: 1rem;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
+
+.options-container {
+    padding: 10px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- MEJORAS ESTÉTICAS DEL CHAT --- */
+
+/* 3. Estilo de la palabra "Respuesta..." en la barra */
+#visual-input { 
+    font-size: 1.1rem; 
+    color: #1a1a1a; 
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+#visual-input.placeholder { 
+    color: var(--color-tutor); 
+    opacity: 0.7;
+    font-style: italic;
+}
+
+/* --- ESTILO MATEMÁTICO REAL (REVISADO) --- */
+/* --- FORMATO MATEMÁTICO DEFINITIVO --- */
+
+
+.math-container {
+    font-family: 'Times New Roman', serif !important;
+    font-size: 1.2em;
+    background: none !important; /* BORRA EL CUADRO AMARILLO/LILA */
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 5px;
+    display: inline-block;
+}
+
+/* Color beige si el tema es masculino */
+.tema-masculino .math-container {
+    background-color: rgba(229, 211, 179, 0.2);
+    border-color: rgba(229, 211, 179, 0.4);
+}
+
+.math-sign {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold !important;
+    color: var(--color-tutor);
+}
+
+.math-txt {
+    font-style: italic !important;
+    font-weight: bold !important;
+    color: #333;
+}
+
+#start-btn {
+    display: block;
+    width: 85%;
+    margin: 25px auto;
+    padding: 18px;
+
+    border-radius: 50px;
+    border: none;
+
+    background: linear-gradient(135deg, #b8a5dd, #9f8ad1);
+    color: white;
+
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    position: relative;
+    overflow: hidden;
+
+    box-shadow: 
+        0 8px 20px rgba(184, 165, 221, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+
+    transition: all 0.25s ease;
+}
+
+#start-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 12px 30px rgba(184, 165, 221, 0.6),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+#start-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 10px rgba(184, 165, 221, 0.3);
+}
+
+#start-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-25deg);
+}
+
+#start-btn:hover::after {
+    left: 130%;
+    transition: 0.6s;
+}
+
+/* Contenedor invisible para la ecuación */
+.math-book {
+    font-family: 'Times New Roman', serif !important;
+    font-size: 1.25em;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 4px;
+    display: inline-block;
+}
+
+/* Letras x, y, a, b en cursiva (como en los libros) */
+.m-t {
+    font-style: italic !important;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Signos + y - resaltados y con espacio */
+.m-s {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold !important;
+    color: var(--color-tutor);
+    margin: 0 6px;
+}
+
+.math-container-clean {
+    display: inline-block;
+    font-family: 'Times New Roman', serif !important;
+    font-size: 1.2em;
+    padding: 0 5px;
+    background: none !important; /* Adiós al cuadro amarillo/lila */
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ===== ARREGLO DE ECUACIONES (CONECTA CON JS) ===== */
+
+.contenedor-ecuacion {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+}
+
+.v-letra {
+    font-style: italic;
+    font-weight: bold;
+    color: #333;
+}
+
+.s-signo {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: var(--color-tutor);
+    margin: 0 6px;
+}
+
+/* ===== TECLADO PRO FINAL (RESPONSIVO) ===== */
+
+/* ===== TECLADO ESTILO CELULAR ===== */
+
+#math-keyboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    
+    gap: 4px;              /* 🔥 menos espacio */
+    padding: 6px 8px;     /* más compacto */
+    
+    max-width: 400px;      /* no muy ancho */
+    margin: 0 auto;
+}
+#math-keyboard button {
+    width: 100%;
+    height: 32px;
+
+    border-radius: 10px;
+    background: #f7f7f8;
+
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    color: #333;
+
+    border: 1px solid var(--bordes-gris);
+
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+    transition: all 0.1s ease;
+}
+
+#math-keyboard button:active {
+    transform: scale(0.97);
+    background: #ececf0;
+}
+
+@media (max-width: 600px) {
+    #math-keyboard button {
+        height: clamp(32px, 6vh, 70px);
+        font-size: 0.9rem;
+    }
+}
+
+/* 💻 PC */
+@media (min-width: 900px) {
+    #math-keyboard button {
+        height: 45px;
+        font-size: 1rem;
+    }
+}
+
+/* BOTONES ESPECIALES */
+.send-key {
+    background: var(--color-tutor);
+    color: white;
+}
+
+.clear-key {
+    background: #ffe0e0;
+}
+
+.delete-key {
+    background: #fff0cc;
+}
+
+/* ===== TECLADO CON COLORES DEL SISTEMA ===== */
+
+/* Base */
+#math-keyboard button {
+    border: 1px solid var(--bordes-gris);
+}
+
+/* Variables (x, y) */
+.key-variable {
+    background: color-mix(in srgb, var(--color-user) 30%, white);
+    color: var(--color-user);
+}
+
+/* Operadores */
+#math-keyboard button:nth-child(3),
+#math-keyboard button:nth-child(4) {
+    background: color-mix(in srgb, var(--color-tutor) 30%, white);
+    color: var(--color-tutor);
+}
+
+/* Enviar */
+.send-key {
+    background: var(--color-tutor);
+    color: white;
+}
+
+/* Limpiar */
+.clear-key {
+    background: color-mix(in srgb, orange 30%, white);
+}
+
+/* Borrar */
+.delete-key {
+    background: color-mix(in srgb, red 20%, white);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.lila-btn-main {
+    display: block;
+    width: 85%;
+    margin: 20px auto;
+    padding: 16px;
+
+    border-radius: 50px;
+    border: none;
+
+    background: linear-gradient(
+        135deg,
+        var(--color-tutor),
+        color-mix(in srgb, var(--color-tutor) 70%, black)
+    );
+
+    color: white;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 20px rgba(184, 165, 221, 0.4);
+
+    transition: all 0.25s ease;
+}
+
+.lila-btn-main:hover {
+    transform: translateY(-2px);
+}
+
+.lila-btn-main:active {
+    transform: scale(0.95);
+}
+
+.footer-fixed {
+    background: var(--gris-fondo);
+    padding-bottom: 10px;
+    border-top: 1px solid #ddd;
+
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 450px;
+}
