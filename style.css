@@ -615,16 +615,22 @@ body {
 }
 
 .footer-fixed {
-    background: var(--gris-fondo);
-    padding-bottom: 10px;
-    border-top: 1px solid #ddd;
-
     position: fixed;
     bottom: 0;
     width: 100%;
     max-width: 450px;
+
+    background: white;
+
+    border-top: 1px solid #ddd;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    z-index: 1000;
 }
 
+#chat-box {
+    scroll-behavior: smooth;
+}
 button {
     transition: all 0.2s ease;
     border-radius: 12px;
@@ -648,4 +654,93 @@ button:active {
 
 button.hover {
     transform: scale(1.05);
+}
+
+button {
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: scale(1);
+}
+
+/* Efecto cuando se presiona */
+button.active-touch {
+    transform: scale(0.92);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Hover para PC */
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Opcional: más suave en móvil */
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Botón presionado */
+button.active-touch {
+    transform: scale(0.94);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Ripple */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-effect 0.5s linear;
+    background: rgba(255,255,255,0.6);
+    pointer-events: none;
+}
+
+@keyframes ripple-effect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Quita efecto azul feo en móvil */
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#chat-box {
+    flex: 1;
+    overflow-y: auto;
+
+    padding: 15px;
+    padding-bottom: 140px; /* espacio para teclado */
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    background: white;
+
+    scroll-behavior: smooth;
+}
+
+#app-container {
+    height: 100dvh;
+}
+
+#input-section {
+    transition: transform 0.25s ease;
+}
+
+.footer-fixed {
+    transition: transform 0.25s ease;
+}
+
+#chat-box {
+    transition: padding-bottom 0.25s ease;
 }
