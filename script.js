@@ -140,7 +140,20 @@ function adj(masculino, femenino) {
 
 function playSound(id) {
     const s = document.getElementById(id);
-    if (s) { s.currentTime = 0; s.play().catch(e => console.log("Audio bloqueado")); }
+    if (!s) return;
+
+    s.currentTime = 0;
+
+    const playPromise = s.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            // 🔇 Si falla, reintenta después de interacción
+            document.body.addEventListener("click", () => {
+                s.play().catch(()=>{});
+            }, { once: true });
+        });
+    }
 }
 
 function cambiarCara(animo, elementoId) {
@@ -494,11 +507,15 @@ let puntajeAcumulado = 100;
 let erroresReglaOro = 0;    
 
 document.getElementById('send-btn').onclick = async () => {
+
+    playSound('sound-send'); // 🔥 SOLUCIÓN
+
     if (!textoRespuesta) return;
+
     const entrada = textoRespuesta
-    .replace(/\s+/g, '') 
-    .replace(/−/g, '-')  
-    .toLowerCase();
+        .replace(/\s+/g, '') 
+        .replace(/−/g, '-')  
+        .toLowerCase();
 
     const ej = ejerciciosSesion[indiceEjercicio];
 
