@@ -1,9 +1,9 @@
-onst MENSAJES_INTELIGENTES = {
+const MENSAJES_INTELIGENTES = {
     suma: {
         intro: [
             "Observa cómo se combinan los términos 👀",
             "Este ejercicio es directo, fíjate bien en los signos.",
-            "Vamos a trabajar con suma de polinomios 💪" 
+            "Vamos a trabajar con suma de polinomios 💪"
         ],
         pista: "Aquí no cambian los signos, solo elimina los paréntesis."
     },
@@ -140,13 +140,10 @@ function adj(masculino, femenino) {
 
 function playSound(id) {
     const s = document.getElementById(id);
-    if (!s) return;
-
-    s.currentTime = 0;
-    s.play().catch(() => {});
+    if (s) { s.currentTime = 0; s.play().catch(e => console.log("Audio bloqueado")); }
 }
 
-fuction cambiarCara(animo, elementoId) {
+function cambiarCara(animo, elementoId) {
     const idFinal = (elementoId === 'teacher-avatar') ? 'teacher-avatar-header' : elementoId;
     const img = document.getElementById(idFinal);
     if(img && userData.gender) {
@@ -401,18 +398,32 @@ async function lanzarEjercicio() {
 
 async function msgTutor(mensajes, animo = "s") {
     const lista = Array.isArray(mensajes) ? mensajes : [mensajes];
-    cambiarCara(animo, 'teacher-avatar-header'); 
+    cambiarCara(animo, 'teacher-avatar-header');
+
+    const box = document.getElementById('chat-box');
+
     for (const t of lista) {
+
+        if (!t || t.trim() === "") continue;
+
+        // ⏳ Simula "escribiendo..."
+        await new Promise(r => setTimeout(r, 600));
+
         playSound('sound-receive');
-        const box = document.getElementById('chat-box');
+
         const div = document.createElement('div');
         div.className = 'msg tutor-msg';
-        div.innerHTML = format(t); 
-        
+        div.innerHTML = format(t);
+
         box.appendChild(div);
-        scrollSuave();
+
+requestAnimationFrame(() => {
+    scrollToBottom();
+});
         box.scrollTop = box.scrollHeight;
-        if (lista.length > 1) await new Promise(r => setTimeout(r, 1200));
+
+        // ⏳ Espera antes del siguiente mensaje
+        await new Promise(r => setTimeout(r, 1000));
     }
 }
 
@@ -425,7 +436,7 @@ function msgUser(t) {
     
     const chat = document.getElementById('chat-box');
     chat.appendChild(div);
-    scrollSuave();
+scrollToBottom();
     chat.scrollTop = chat.scrollHeight;
 }
 
@@ -435,6 +446,13 @@ function pedirTeclado(instruccion) {
     setTimeout(() => {
         const input = document.getElementById('input-section');
         input.classList.remove('hidden');
+scrollToBottom();
+
+setTimeout(() => {
+    scrollToBottom();
+}, 100);
+
+        document.getElementById('chat-box').classList.add('chat-con-teclado');
 
         autoScrollActivo = true; // 👈 AQUÍ
     }, 300);
@@ -491,6 +509,8 @@ document.getElementById('send-btn').onclick = async () => {
     visual.style.color = "#aaa"; 
     visual.classList.add('placeholder');
     document.getElementById('input-section').classList.add('hidden');
+
+document.getElementById('chat-box').classList.remove('chat-con-teclado');
 
 if (faseActual === "paso_parentesis") {
 
@@ -656,17 +676,14 @@ function mostrarOpciones(a, b, c = null) {
 }
 
 function scrollToBottom() {
-    const chatBox = document.getElementById("chat-box");
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function scrollSuave() {
     const chat = document.getElementById("chat-box");
 
-    chat.scrollTo({
-        top: chat.scrollHeight,
-        behavior: "smooth"
-    });
+    chat.scrollTop = chat.scrollHeight;
+
+    // 🔥 FORZAR (clave)
+    setTimeout(() => {
+        chat.scrollTop = chat.scrollHeight;
+    }, 50);
 }
 
 const chatBox = document.getElementById("chat-box");
@@ -674,110 +691,38 @@ const chatBox = document.getElementById("chat-box");
 chatBox.addEventListener("scroll", () => {
     const cercaDelFinal = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 50;
 
-    autoScrollActivo = cercaDelFinal;
+    if (!cercaDelFinal) {
+        autoScrollActivo = false; // 👈 usuario está explorando arriba
+    }
 });
 
-document.querySelectorAll('button').forEach(btn => {
+document.body.addEventListener('click', () => {
+    const s1 = document.getElementById('sound-send');
+    const s2 = document.getElementById('sound-receive');
 
-    function activarBoton(e) {
-        btn.classList.add('active-touch');
-
-        // 📳 Vibración (solo móvil compatible)
-        if (navigator.vibrate) {
-            navigator.vibrate(15);
-        }
-
-        // 🌊 Ripple
-        const circle = document.createElement("span");
-        circle.classList.add("ripple");
-
-        const rect = btn.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-
-        circle.style.width = circle.style.height = size + "px";
-        circle.style.left = (e.clientX - rect.left - size / 2) + "px";
-        circle.style.top = (e.clientY - rect.top - size / 2) + "px";
-
-        btn.appendChild(circle);
-
-        setTimeout(() => {
-            circle.remove();
-        }, 500);
-    }
-
-    function desactivarBoton() {
-        btn.classList.remove('active-touch');
-    }
-
-    // 📱 Touch
-    btn.addEventListener('touchstart', (e) => {
-        activarBoton(e.touches[0]);
-    });
-
-    btn.addEventListener('touchend', desactivarBoton);
-
-    // 🖱️ PC
-    btn.addEventListener('mousedown', activarBoton);
-    btn.addEventListener('mouseup', desactivarBoton);
-    btn.addEventListener('mouseleave', desactivarBoton);
-});
-
-document.addEventListener("touchstart", () => {
-    const sonidos = document.querySelectorAll("audio");
-    sonidos.forEach(s => {
-        s.play().then(() => {
-            s.pause();
-            s.currentTime = 0;
-        }).catch(() => {});
-    });
+    if (s1) s1.play().then(() => s1.pause()).catch(()=>{});
+    if (s2) s2.play().then(() => s2.pause()).catch(()=>{});
 }, { once: true });
 
-document.addEventListener("click", () => {
-    const audios = document.querySelectorAll("audio");
-    audios.forEach(a => {
-        a.play().then(() => {
-            a.pause();
-            a.currentTime = 0;
-        }).catch(() => {});
+document.addEventListener("DOMContentLoaded", () => {
+
+    let usuarioScroll = false;
+
+    const chatBox = document.getElementById("chat-box");
+
+    chatBox.addEventListener("scroll", () => {
+        const cercaDelFinal = chatBox.scrollHeight - chatBox.scrollTop <= chatBox.clientHeight + 50;
+        usuarioScroll = !cercaDelFinal;
     });
-}, { once: true });
 
-let alturaInicial = window.innerHeight;
-
-window.addEventListener("resize", () => {
-    const nuevaAltura = window.innerHeight;
-
-    // Si baja mucho → teclado abierto
-    if (alturaInicial - nuevaAltura > 150) {
-        scrollSuave();
-    }
-
-    alturaInicial = nuevaAltura;
-});
-
-const chatBox = document.getElementById("chat-box");
-const footer = document.querySelector(".footer-fixed");
-
-if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", () => {
-
-        const alturaPantalla = window.innerHeight;
-        const alturaVisible = window.visualViewport.height;
-
-        const tecladoAltura = alturaPantalla - alturaVisible;
-
-        if (tecladoAltura > 100) {
-            // 🔥 teclado abierto
-            footer.style.transform = `translateY(-${tecladoAltura}px)`;
-            chatBox.style.paddingBottom = `${tecladoAltura + 120}px`;
-
-            // 👇 EXTRA PRO (recomendado)
+    window.scrollToBottom = function () {
+        if (!usuarioScroll) {
             chatBox.scrollTop = chatBox.scrollHeight;
-
-        } else {
-            // 🔥 teclado cerrado
-            footer.style.transform = `translateY(0px)`;
-            chatBox.style.paddingBottom = `140px`;
         }
-    });
-}
+    };
+
+});
+
+chatBox.addEventListener("wheel", (e) => {
+    chatBox.scrollTop += e.deltaY;
+});
